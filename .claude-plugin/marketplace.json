@@ -1,0 +1,37 @@
+{
+  "name": "media-studio-marketplace",
+  "owner": {
+    "name": "Harsha",
+    "url": "https://github.com/hharsha98"
+  },
+  "description": "media-studio for Claude Code, plus the official Remotion skills it depends on (pinned to an audited commit).",
+  "plugins": [
+    {
+      "name": "media-studio",
+      "source": "./plugins/media-studio",
+      "description": "Make honest LinkedIn-ready media with Claude Code: launch teasers with music, videos from code, narrated demos, social cards, carousels and website heroes.",
+      "category": "media",
+      "tags": [
+        "video",
+        "remotion",
+        "linkedin",
+        "teaser",
+        "carousel"
+      ]
+    },
+    {
+      "name": "remotion",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/remotion-dev/claude-code-plugin.git",
+        "sha": "ce2654df2ddcf41f3b2695693be7b3a0a05c6bc5"
+      },
+      "description": "Official Remotion agent skills (best practices, captions, rendering and more), pinned to commit ce2654d. Required by media-studio.",
+      "category": "media",
+      "tags": [
+        "remotion",
+        "video"
+      ]
+    }
+  ]
+}

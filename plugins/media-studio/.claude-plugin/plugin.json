@@ -1,0 +1,14 @@
+{
+  "name": "media-studio",
+  "version": "1.0.0",
+  "description": "Make honest LinkedIn-ready media with Claude Code: launch teasers with music, videos from code, narrated demos, social cards, carousels and website heroes. Real footage only. Works on macOS, Windows and Linux.",
+  "author": {
+    "name": "Harsha",
+    "url": "https://github.com/hharsha98"
+  },
+  "homepage": "https://github.com/hharsha98/media-studio",
+  "repository": "https://github.com/hharsha98/media-studio",
+  "license": "MIT",
+  "keywords": ["video", "remotion", "linkedin", "teaser", "carousel", "social-card", "launch-video", "demo", "media"],
+  "dependencies": ["remotion"]
+}
