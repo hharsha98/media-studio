@@ -77,7 +77,8 @@ from the hashes in `assets-manifest.json`. Re-running setup is safe; finished st
 - **Claude usage** comes from your own plan.
 - **Optional paid items are never used without your yes:** kie.ai image or video generation (website flow), or any hosted voice API.
 - **Narration** is optional and free with the [VoiceStudio](https://github.com/debpalash/VoiceStudio) app (you install it
-  yourself) or your own recording. Use a commercially usable engine (Kokoro); see `flows/voice.md`.
+  yourself) or your own recording. Default voice: **"Aiden"** (Qwen3-TTS, Apache-2.0), directed as a warm, confident
+  presenter; lighter option: Kokoro's "Bella". Both are commercially usable; see `flows/voice.md`.
 
 ## Privacy
 

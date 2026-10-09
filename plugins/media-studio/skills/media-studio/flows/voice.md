@@ -16,8 +16,19 @@ Never use a paid voice API (ElevenLabs and similar) without the user's explicit 
 ## The one rule that matters: pick a commercially usable engine
 VoiceStudio can run many engines. Its DEFAULT engine, OmniVoice, uses model weights with non-commercial terms. Do not use
 it for anything the user publishes for business. Check an engine's licence on its model card before using it.
-- Apple Silicon Mac: in VoiceStudio choose the **MLX-Audio** engine with the **Kokoro** model (Kokoro-82M, Apache-2.0).
-  Its engine id for the API is `mlx-audio`.
+- Apple Silicon Mac, **recommended voice: "Aiden", directed.** In VoiceStudio choose the **MLX-Audio** engine with the
+  model `mlx-community/Qwen3-TTS-12Hz-1.7B-CustomVoice-6bit` (Qwen3-TTS, Apache-2.0, about 2.5 GB, downloaded once the
+  first time it speaks). It takes a written direction, so it does not sound flat. `scripts/speak.mjs` uses it
+  automatically: voice `Aiden` with the direction "Warm, confident, friendly tech presenter showing a colleague a new
+  tool. Conversational and upbeat, not salesy. Brisk, steady pace. End each sentence on a confident, falling tone."
+  Alternative speaker: `Ryan`. Do not send `language` (Qwen3 does not know "en"; leaving it out means auto) and do not rely
+  on `speed` (not supported for this model yet): steer pace through the direction instead.
+- Apple Silicon Mac, **lighter option, no big download:** the **Kokoro** model (Kokoro-82M, Apache-2.0). `speak.mjs` then
+  uses `af_bella` (warm American female, graded A- by Kokoro's makers) at speed 1.2, about 150 words a minute. Kokoro's
+  male voices are graded C+ or lower. Its engine id for the API is `mlx-audio`.
+- To make a choice stick when the app is opened normally, select it in VoiceStudio (Settings, Engines) or
+  `POST /engines/select {"family":"tts","backend_id":"mlx-audio","model_id":"<model id>"}`. A personal default can also go
+  in `<MS>/voice.json`, e.g. `{"voice":"Aiden","instructions":"..."}`; `--voice` on the command line always wins.
 - Windows or Linux: MLX-Audio is Apple-only. In VoiceStudio's model catalogue pick an engine whose label says Apache-2.0 or
   MIT (the app shows each engine's licence in its label; `GET /engines/tts` lists them). Kokoro is also offered through the
   Sherpa-ONNX engine. Confirm the model card before use.
@@ -38,6 +49,15 @@ it for anything the user publishes for business. Check an engine's licence on it
 - MCP: the running app also mounts an MCP server at `http://127.0.0.1:3900/mcp/` (keep the trailing slash). Not needed here.
 - Privacy: VoiceStudio sends nothing out by default; its optional analytics are opt-in. `OMNIVOICE_ANALYTICS_DISABLED=1` in
   its environment disables them entirely. Never print or store an auth token if the app is configured with one.
+
+## What matters more than the voice (LinkedIn)
+- **Captions first.** LinkedIn's own study (2021, 3,500+ ads) found 79% of feed videos are watched with the sound off,
+  and LinkedIn autoplays muted. Burn captions in: 1-2 lines, at most about 42 characters a line, 2-4 seconds each. The
+  first 3 seconds must make sense with no sound.
+- **One audio source.** The same study found voice plus a music track lowered completion. Use narration only, or keep music
+  barely audible under it.
+- **Pace 150-165 words a minute**, warm and conversational, falling tone at the end of sentences. Two or three sentences
+  per request sound more natural than one short line.
 
 ## Make the clips
 1. Write the script as numbered lines, about 2.5 words a second. Keep each line under 4096 characters (one sentence or two).

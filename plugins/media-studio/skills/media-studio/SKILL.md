@@ -36,7 +36,7 @@ every file in one workspace, and only ever shows the real product.
 | A narrated demo or walkthrough of a real app, plus a 30 s vertical cut | `<SKILL>/flows/demo.md` | capture, narration, Remotion |
 | Images: LinkedIn image, carousel (PDF), social or OG card, thumbnail, screenshot, device frame | `<SKILL>/flows/stills.md` | HTML + `still.mjs` |
 | A website hero, scroll animation, scrollytelling or landing-page visuals | `<SKILL>/flows/web.md` | scroll-craft |
-| A voiceover or narration | `<SKILL>/flows/voice.md` | VoiceStudio (Kokoro), or your own recording, or captions |
+| A voiceover or narration | `<SKILL>/flows/voice.md` | VoiceStudio ("Aiden", directed; or Kokoro "Bella"), or your own recording, or captions |
 | "Make media for my LinkedIn post", or handing files to the LinkedIn skills | `<SKILL>/flows/linkedin.md` | `media.json` contract |
 | First-time install, something is missing, or an upgrade | `<SKILL>/flows/setup.md` | `/media-studio:setup` |
 
