@@ -19,10 +19,29 @@ npm run smoke             # real end-to-end render (needs VoiceStudio)
 
 ## Connect
 
+### Build once
+
+```sh
+cd mcp && npm install && npm run build
+npm link        # optional: puts `media-studio-mcp` on your PATH
+```
+
+### Command-line tools (stdio mode)
+
+These tools start the server themselves and talk to it directly. Replace `/absolute/path/to` with the real folder.
+
 Claude Code:
 
 ```sh
 claude mcp add media-studio -s user -- node /absolute/path/to/media-studio/mcp/dist/index.js
+```
+
+Codex CLI, in `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.media-studio]
+command = "node"
+args = ["/absolute/path/to/media-studio/mcp/dist/index.js"]
 ```
 
 Cursor, in `~/.cursor/mcp.json`:
@@ -34,6 +53,51 @@ Cursor, in `~/.cursor/mcp.json`:
   }
 }
 ```
+
+Gemini CLI, in `~/.gemini/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "media-studio": { "command": "node", "args": ["/absolute/path/to/media-studio/mcp/dist/index.js"] }
+  }
+}
+```
+
+### Apps that need a URL (HTTP mode)
+
+Some apps cannot start a program; they only connect to a web address. For those, run the server in HTTP mode:
+
+```sh
+node dist/index.js --http        # or: npm run start:http
+```
+
+Options: `--port 8095` (also env `MEDIA_STUDIO_MCP_PORT`) and `--host 127.0.0.1` (only `127.0.0.1`, `::1` and `localhost` are accepted).
+
+On the first start the server makes a secret key and saves it in `~/MediaStudio/mcp-token` (or `$MEDIA_STUDIO_HOME/mcp-token`). To use your own key instead, set `MEDIA_STUDIO_MCP_TOKEN` (at least 16 characters). Copy the key to the clipboard with:
+
+```sh
+pbcopy < ~/MediaStudio/mcp-token
+```
+
+Then connect the app to `http://127.0.0.1:8095/mcp` and send the header `Authorization: Bearer <key>`.
+
+LoopBay desktop app: Settings, Plugins, Custom MCP server. Fill in a name (for example `media-studio`), the address `http://127.0.0.1:8095/mcp`, the header name `Authorization` and the value `Bearer <key>`. Untick "Read tools only" so that rendering shows an approval card.
+
+Claude Code over HTTP:
+
+```sh
+claude mcp add --transport http media-studio-http http://127.0.0.1:8095/mcp --header "Authorization: Bearer $(cat ~/MediaStudio/mcp-token)"
+```
+
+`http://127.0.0.1:8095/health` answers without a key; it is only there so you can check that the server is up.
+
+### Security
+
+- The server listens on this Mac only; other computers cannot reach it.
+- Every request to `/mcp` needs the key, and requests with a foreign `Host` header are refused.
+- The key file is private to your user (mode 0600). The key is never printed or logged.
+- Keep the terminal window open while you use HTTP mode; closing it stops the server.
 
 ## Environment variables
 
@@ -73,7 +137,7 @@ Each run lives in `<MEDIA_STUDIO_HOME>/runs/<date>-mcp-<slug>-<id>/` with `brief
 
 ## Limits
 
-- Local only; tested on macOS (Apple Silicon). The server speaks stdio and writes nothing else to stdout.
+- Local only; tested on macOS (Apple Silicon). In stdio mode the server writes nothing but MCP messages to stdout; HTTP mode (loopback only, key required) is described under Connect.
 - VoiceStudio is required for narration. Without it, `render_video` fails at the voice step.
 - Remotion licence: free for individuals and companies of up to 3 people; larger companies need a company licence (remotion.pro).
 - Disk: about 1 GB for the Remotion project plus about 100 MB per run (the unmastered render is deleted after mastering). Render time: roughly 15 to 20 s of render plus 15 to 35 s of voice for a 25 s video on an M-series Mac.
