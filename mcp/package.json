@@ -1,0 +1,33 @@
+{
+  "name": "media-studio-mcp",
+  "version": "0.2.0",
+  "description": "Local MCP server that turns a video plan into a short rendered video plus a neutral run report.",
+  "type": "module",
+  "bin": {
+    "media-studio-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "remotion",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "tsc",
+    "test": "node --test \"dist/test/*.test.js\"",
+    "start:http": "node dist/index.js --http",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2"
+  }
+}

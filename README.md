@@ -51,6 +51,26 @@ The same from a terminal: `claude plugin marketplace add hharsha98/media-studio`
 Then just ask: *"Use media-studio to make a 20 second teaser for this project."* Run `/media-studio:check` any time to see
 what is ready.
 
+## Use it from any AI tool (MCP server)
+
+The [`mcp/`](mcp/) folder is a stand-alone **MCP server** (Model Context Protocol, the open standard AI tools use to call
+outside tools). Claude Code, Codex, Cursor, Gemini CLI or any other MCP client can send it a plain description and get
+back a short narrated video plus a neutral run report.
+
+```sh
+cd mcp && npm install && npm run build
+claude mcp add media-studio -s user -- node "$(pwd)/dist/index.js"   # Claude Code; other tools below
+```
+
+- **Command-line tools** (Claude Code, Codex, Cursor, Gemini CLI) start it themselves over stdio.
+- **Apps that need a web address** (for example a desktop agent workspace): `npm run start:http` serves
+  `http://127.0.0.1:8095/mcp` on this computer only, and every request must carry the key saved in `~/MediaStudio/mcp-token`.
+- Tools: `check_setup`, `research_topic`, `get_style_guide`, `draft_plan`, `validate_plan`, `render_video`, `get_job`,
+  `report_usage`, `list_runs`.
+
+Setup lines for each tool, requirements (the `~/MediaStudio` workspace from `/media-studio:setup`, local VoiceStudio for
+narration) and security notes: [mcp/README.md](mcp/README.md).
+
 ## What `/media-studio:setup` installs, and how big it is
 
 Everything goes into one folder, `~/MediaStudio` (set `MEDIA_STUDIO_HOME` to change it). **Nothing is installed globally.**
