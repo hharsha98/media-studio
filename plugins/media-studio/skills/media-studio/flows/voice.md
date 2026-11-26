@@ -33,7 +33,9 @@ it for anything the user publishes for business. Check an engine's licence on it
   MIT (the app shows each engine's licence in its label; `GET /engines/tts` lists them). Kokoro is also offered through the
   Sherpa-ONNX engine. Confirm the model card before use.
 - `scripts/speak.mjs` asks VoiceStudio for its active engine first and refuses `omnivoice`, `omnivoice-gguf` and `audiocpp`
-  unless the user passes `--allow-engine`.
+  unless the user passes `--allow-engine`. It then names that engine in every speech request (`"model": "<engine id>"`):
+  a request without `model` is answered by VoiceStudio's default engine, OmniVoice, even when `/engines/tts` shows another
+  engine as active. The MCP server does the same. When you call the API yourself, always send `model`.
 
 ## Connect (facts about VoiceStudio's public API)
 - Default address `http://127.0.0.1:3900` (`localhost` works too). `GET /health` returns JSON such as

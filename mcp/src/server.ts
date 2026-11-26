@@ -14,7 +14,7 @@ import { tracingConfigured } from "./tracing.js";
 import { asrInfo, voiceInfo } from "./voice.js";
 
 export const SERVER_NAME = "media-studio-mcp";
-export const SERVER_VERSION = "0.2.0";
+export const SERVER_VERSION = "0.2.1";
 
 const text = (t: string) => ({ content: [{ type: "text" as const, text: t }] });
 const json = (o: unknown) => text(JSON.stringify(o, null, 2));

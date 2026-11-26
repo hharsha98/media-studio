@@ -7,6 +7,16 @@ import { parseSearchTitles, parseSummary } from "../research.js";
 import { wavDurationSeconds } from "../wav.js";
 import { wordErrorRate } from "../wer.js";
 import { layoutScenes } from "../render.js";
+import { speechBody } from "../voice.js";
+
+test("speechBody always names the checked engine and refuses non-commercial or missing ones", () => {
+  const body = speechBody("Hello.", { voice: "Aiden", instructions: "Warm." }, "mlx-audio");
+  assert.equal(body.model, "mlx-audio");
+  assert.equal(body.voice, "Aiden");
+  assert.equal(body.response_format, "wav");
+  assert.throws(() => speechBody("Hello.", {}, ""), /no voice engine/);
+  assert.throws(() => speechBody("Hello.", {}, "omnivoice"), /non-commercial/);
+});
 
 const goodPlan = () => ({
   title: "Tides",

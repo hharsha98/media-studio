@@ -85,12 +85,24 @@ export interface SynthResult {
   seconds: number;
 }
 
-/** One narration clip. Refuses non-commercial engines. Retries 503 (model loading) for up to 90 s. */
-export async function synthesize(text: string, settings: VoiceSettings): Promise<SynthResult> {
-  const body: Record<string, unknown> = { input: text, response_format: "wav", voice: settings.voice };
+/**
+ * The JSON body of one speech request. It always names the engine that passed the licence check:
+ * without "model", VoiceStudio answers with its default engine (OmniVoice, non-commercial weights),
+ * whatever /engines/tts reports as active.
+ */
+export function speechBody(text: string, settings: VoiceSettings, engine: string): Record<string, unknown> {
+  if (!engine) throw new Error("no voice engine given: the speech request must name the checked engine");
+  if (NON_COMMERCIAL.has(engine)) throw new Error(`the "${engine}" engine uses weights with non-commercial terms`);
+  const body: Record<string, unknown> = { input: text, model: engine, response_format: "wav", voice: settings.voice };
   if (settings.instructions) body.instructions = settings.instructions;
   if (settings.speed !== undefined) body.speed = settings.speed;
   if (settings.language) body.language = settings.language;
+  return body;
+}
+
+/** One narration clip with the given (already checked) engine. Retries 503 (model loading) for up to 90 s. */
+export async function synthesize(text: string, settings: VoiceSettings, engine: string): Promise<SynthResult> {
+  const body = speechBody(text, settings, engine);
   const deadline = Date.now() + 90_000;
   let delay = 2000;
   for (;;) {

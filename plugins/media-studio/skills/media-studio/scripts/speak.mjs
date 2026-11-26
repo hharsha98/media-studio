@@ -72,7 +72,10 @@ for (const key of ["speed", "language", "instructions"]) {
   if (opt(key) !== undefined) body[key] = key === "speed" ? Number(opt(key)) : opt(key);
 }
 if (body.speed !== undefined) body.speed = Number(body.speed);
-if (opt("model")) body.model = opt("model");
+// Always name the engine that passed the licence check: without "model", VoiceStudio answers with its
+// default engine (OmniVoice, non-commercial weights), whatever /engines/tts reports as active.
+if (!engine) { console.error("VoiceStudio reported no active engine. Pass --model <engine id> (for example mlx-audio)."); process.exit(3); }
+body.model = engine;
 console.log(`voice: ${body.voice}${body.instructions ? " (directed)" : ""}${body.speed ? `, speed ${body.speed}` : ""}`);
 const res = await fetch(BASE + "/v1/audio/speech", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body), signal: AbortSignal.timeout(10 * 60 * 1000) });
 const type = res.headers.get("content-type") || "";
