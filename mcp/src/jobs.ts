@@ -211,7 +211,7 @@ async function runJob(rec: JobRecord, plan: VideoPlan): Promise<void> {
       const narrated = plan.scenes.filter((s) => s.narration.trim());
       let n = 0;
       for (const s of narrated) {
-        const res = await synthesize(s.narration, settings);
+        const res = await synthesize(s.narration, settings, info.engine);
         fs.writeFileSync(path.join(dir, "public", "voice", `${s.id}.wav`), res.wav);
         ctx.audio[s.id] = res.seconds;
         change(rec, { progress: Math.round((++n / narrated.length) * 100) });
